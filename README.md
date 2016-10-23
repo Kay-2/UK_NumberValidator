@@ -2,7 +2,7 @@ The index file has as simple form used to post the number to uk_mobileNum_valida
 
 A basic character and length check are done.
 The function 'validateFormat' takes the input and replaces all non digit characters except the prefix character '+'
-The preg_match function takes in my own regex pattern. Allows for option +44 or 44, optional leading 0, mandatory start of 07x, where x is between 1-9 excluding 070, 072 and 076, as these are not valid mobile numbers.
+The preg_match function takes in my own regex pattern. Allows for option +44 or 44, optional leading 0, mandatory start of 07x, where x is between 1-9 excluding 0, 2 and 6, as these are not valid mobile numbers.
 If the pattern is matched, a result of true is passed back to the calling function.
 
 If it fails to match the valid pattern, the 'getErrors' function is called. This function goes through the number and validates each part until the problem is identified, at which point the appropriate error message is assigned and returned.
