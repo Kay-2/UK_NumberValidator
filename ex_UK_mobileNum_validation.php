@@ -93,7 +93,7 @@ function checkCharacters($var)
 	{
 		return false;
 	}
-	elseif(preg_match('/^[^\d\+]/', $rawText_input)) // if anything but a digit or a plus is at the start+
+	elseif(preg_match('/^[^\d\+]/', $rawText_input)) // if anything but a digit or a plus is at the start
 	{
 		return false;
 	}
@@ -128,12 +128,9 @@ function getErrors($var) // traces the error in the number and displays appropri
 	}
 	else // Check if mobile prefix 72 or 76 were used, both are invalid according the numverify
 	{
-		if(preg_match('/^(^07)|(^7)/', $input, $matches))
-		{
-			$input = preg_replace('/^(^07)/', "7", $input); //Remove start of mobile prefix	
-		}
-		
-		if(preg_match('/^(^70)|(^72)|(^76)/', $input, $matches)) // Check if invalid 07X numbers eg 070, 072 and 076
+		$input = preg_replace('/^(^07)/', "7", $input); //we know it exists and is valid, Remove start of mobile prefix	'0'
+
+		if(preg_match('/^(^70)|(^72)|(^76)/', $input, $matches)) // Check if invalid 07X numbers exist i.e. 070, 072 and 076
 		{
 			$errorMessage = '<b style="color:red;">Error: Invalid Mobile Prefix</b> - Mobile Number should not start with 0/70, 0/72 or 0/76';
 			return $errorMessage;	
