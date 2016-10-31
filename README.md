@@ -1,3 +1,17 @@
+A soloution to an exercise given to a candidate for the position of front end developer. 
+
+EXERCISE: UK Mobile Number Validation.
+DESC: Write a PHP script with functions that perform the 
+REQUIREMENTS:
+
+1- Accepts a single user entered free text input parameter as 'phone_num'
+2- Validates using a regular expression whether it is a valid UK phone number format
+3- Calls an API (https://numverify.com/) to validate if this is an active UK mobile number
+4- Returns PASS/FAIL message to the function caller with appropriate error messages
+
+-----------------------------------------------------------------------------------------------------------
+Solution Explained:
+
 The index file has as simple form used to post the number to uk_mobileNum_validation.php file.
 
 A basic character and length check are done.
