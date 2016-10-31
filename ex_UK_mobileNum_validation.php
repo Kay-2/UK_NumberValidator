@@ -4,33 +4,14 @@ if(isset($_POST) and $_SERVER['REQUEST_METHOD'] === "POST")
 	$rawText_input = $_POST['phone_num'];
 	echo "Original Number: ".$rawText_input."<br/><br/>";
 
-	$charactersOK = checkCharacters($rawText_input); // Check for illegal characters
-	if($charactersOK === false)
-	{
-		echo '<h4 style="color:RED">Invalid characters used</h4>';
-		return;
-	}
-	elseif($charactersOK =="badLen")
-	{
-		echo "Bad Length";
-		return;
-	}
-	
+	checkCharacters($rawText_input); // Check for illegal characters
+
 	$formatValid = validateFormat($rawText_input); // Validates the format of the number against a regular expression	
 	
 	if($formatValid === true) // if validateFormat returns true, call numverify.com verification API and handle response
 	{
 		$number = prepNumber($rawText_input); // Prep Number for API, removes spaces, prefixes etc
-		$isActive = numVerifyAPI_validation($number); // Call API function
-		
-		if($isActive === false) // The nubmer is active.
-		{
-			echo '<h4 style="color:RED;">Inactive UK Mobile Number</h4>';
-		}
-		else
-		{
-			echo '<h4 style="color:GREEN;">Active UK Mobile Number</h4>';
-		}	
+		numVerifyAPI_validation($number); // Call API function
 	} // End if formatValid
 	else // Invalid format. '$formatValid' contains error message, display it
 	{
@@ -81,6 +62,14 @@ function numVerifyAPI_validation($var)
 			}
 		}	
 	} // End for each
+	if($isActive === true)
+	{
+		echo '<h4 style="color:GREEN;">Active UK Mobile Number</h4>';
+	}
+	else
+	{
+		echo '<h4 style="color:RED;">Inactive UK Mobile Number</h4>';
+	}
 
 	return $isActive;
 }// End function numVerify
@@ -91,15 +80,18 @@ function checkCharacters($var)
 	$rawText_input =$var;
 	if(preg_match('/[^\+\d\s\-\(\)]/', $rawText_input)) // if match anything but valid characters from start to finish
 	{
-		return false;
+		echo '<h4 style="color:RED">Invalid characters used</h4>';
+		exit();
 	}
-	elseif(preg_match('/^[^\d\+]/', $rawText_input)) // if anything but a digit or a plus is at the start
+	elseif(preg_match('/^[^\d\+\(]/', $rawText_input)) // if anything but a digit or a plus is at the start
 	{
-		return false;
+		echo '<h4 style="color:RED">Invalid characters at start used used</h4>';
+		exit();
 	}
 	elseif(strlen($rawText_input) < 10) // If the string is empty or less than 10
 	{
-		return "badLen";
+		echo '<h4 style="color:RED">Invalid Length</h4>';
+		exit();
 	}
 }
 //------------------------------------------------------------------------------------------------->>
@@ -154,9 +146,9 @@ function getErrors($var) // traces the error in the number and displays appropri
 function prepNumber($var)
 {
 	$rawText_input = $var;
-	if(preg_match('/^(^\+44)|(^44)/', $rawText_input)) // If international prefix +/44 is found strip it as the api will fail if used
+	if(preg_match('/^(^\+44)|(^44)|(^\(44\))|(^\(\+44\))/', $rawText_input)) // If international prefix +/44 is found strip it as the api will fail if used
 	{
-		$rawText_input = preg_replace('/^(^\+44)|(^44)/', "", $rawText_input); 
+		$rawText_input = preg_replace('/^(^\+44)|(^44)|(^\(44\))|(^\(\+44\))/', "", $rawText_input); 
 	}
 	$number = preg_replace('/[^\d]/', "", $rawText_input); // Replaces all characters but digits
 	return $number;
