@@ -30,6 +30,5 @@ You can uncomment the echo $verificationLink statement if you want to view a lin
 
 The API URL is passed to the 'file_get_contents' function and JSON response is received and then decoded via the 'json_decode' function.
 Looping through the response array, the value for 'carrier' is checked, the API suggests using this field to test if the number is active.
-The 'isActive' flag is set to true or false if carrier value set or not, and returned to the function caller.
-From there appropriate Number active/inactive message is shown.
-and the script is complete
+The 'isActive' flag is set to true or false if carrier value set or not, and the appropriate Number active/inactive message is shown.
+End of script.
